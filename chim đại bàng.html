@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Thiệp Chúc Tết Nguyên Đán - Xuân An Khang</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts hỗ trợ đầy đủ tiếng Việt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- html2canvas để xuất thiệp thành ảnh PNG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Thiết lập font mặc định */
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #fdf6ec;
+            background-image: radial-gradient(#e5c38b 0.75px, transparent 0.75px), radial-gradient(#e5c38b 0.75px, #fdf6ec 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+
+        /* Các lớp font chữ cho thiệp */
+        .font-calligraphy { font-family: 'Dancing Script', cursive; }
+        .font-vibes { font-family: 'Great Vibes', cursive; }
+        .font-luxury { font-family: 'Playfair Display', serif; }
+        .font-modern { font-family: 'Be Vietnam Pro', sans-serif; }
+        .font-geometric { font-family: 'Montserrat', sans-serif; }
+
+        /* Thanh cuộn tùy chỉnh cho bảng điều khiển */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(185, 28, 28, 0.05);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(185, 28, 28, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(185, 28, 28, 0.5);
+        }
+
+        /* Hiệu ứng viền vàng kim ánh sáng */
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(253, 224, 71, 0.15);
+        }
+
+        /* Hiệu ứng mở phong bì / lật thiệp */
+        @keyframes cardAppear {
+            0% { transform: scale(0.92) translateY(15px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-card-open {
+            animation: cardAppear 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Hiệu ứng đung đưa nhẹ cho đèn lồng/sticker */
+        @keyframes swing {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+        .animate-swing {
+            transform-origin: top center;
+            animation: swing 3.5s ease-in-out infinite;
+        }
+
+        /* Đảm bảo tỷ lệ khung thiệp chuẩn đẹp và responsive */
+        #card-preview-container {
+            aspect-ratio: 4 / 5;
+            max-width: 460px;
+            width: 100%;
+            transition: all 0.4s ease;
+        }
+
+        /* Họa tiết chìm cho các mẫu nền */
+        .pattern-dots {
+            background-image: radial-gradient(rgba(253, 224, 71, 0.22) 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+        }
+        .pattern-waves {
+            background-image: repeating-radial-gradient(circle at 0 0, transparent 0, rgba(253, 224, 71, 0.08) 18px), repeating-linear-gradient(rgba(253, 224, 71, 0.05), rgba(253, 224, 71, 0.12));
+        }
+        .pattern-grid {
+            background-size: 28px 28px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-stone-800 flex flex-col">
+
+    <!-- Thông báo nổi (Toast Notification) thay thế cho alert() -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-red-900 text-amber-100 border border-amber-400/50 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+            <i data-lucide="sparkles" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span id="toast-message" class="text-sm font-medium">Thông báo</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-red-900 via-red-800 to-red-900 text-amber-100 shadow-lg border-b-2 border-amber-500/60 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/50 flex items-center justify-center text-2xl shadow-inner">
+                    🏮
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-wide text-amber-300 flex items-center gap-2">
+                        Xưởng Thiệp Tết Việt
+                        <span class="text-[11px] uppercase tracking-wider bg-amber-400 text-red-950 font-bold px-2 py-0.5 rounded-full">Xuân Bính Ngọ</span>
+                    </h1>
+                    <p class="text-xs text-amber-100/80 hidden sm:block">Tự tay thiết kế thiệp xuân ý nghĩa & gửi trao yêu thương</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="randomizeCard()" class="flex items-center gap-1.5 bg-amber-500/20 hover:bg-amber-500/30 active:scale-95 text-amber-200 border border-amber-400/50 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition cursor-pointer" title="Tự động phối màu, mẫu nền và lời chúc ngẫu nhiên">
+                    <i data-lucide="shuffle" class="w-4 h-4 text-amber-300"></i>
+                    <span>Gợi ý ngẫu nhiên</span>
+                </button>
+                <button onclick="downloadCard()" id="btn-download-top" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 active:scale-95 text-red-950 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow-md transition cursor-pointer">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Tải Ảnh PNG</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace: 2 cột trên Desktop, xếp chồng trên Mobile -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            <!-- CỘT TRÁI: BẢNG ĐIỀU KHIỂN TÙY CHỈNH (7 cột trên màn hình lớn) -->
+            <div class="lg:col-span-6 xl:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-amber-200/80 overflow-hidden">
+                <!-- Tabs điều hướng nhanh trên bảng điều khiển -->
+                <div class="grid grid-cols-4 bg-red-50/80 border-b border-amber-200/70 p-1.5 gap-1">
+                    <button onclick="switchTab('template')" id="tab-template" class="tab-btn active flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-red-800 text-amber-200 shadow-sm">
+                        <i data-lucide="layout-template" class="w-4 h-4"></i>
+                        <span>Mẫu Nền</span>
+                    </button>
+                    <button onclick="switchTab('content')" id="tab-content" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold text-stone-600 hover:bg-red-100/60 transition cursor-pointer">
+                        <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                        <span>Lời Chúc</span>
+                    </button>
+                    <button onclick="switchTab('typography')" id="tab-typography" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold text-stone-600 hover:bg-red-100/60 transition cursor-pointer">
+                        <i data-lucide="type" class="w-4 h-4"></i>
+                        <span>Kiểu Chữ</span>
+                    </button>
+                    <button onclick="switchTab('decor')" id="tab-decor" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold text-stone-600 hover:bg-red-100/60 transition cursor-pointer">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Trang Trí</span>
+                    </button>
+                </div>
+
+                <!-- Nội dung từng Tab -->
+                <div class="p-5 sm:p-6 space-y-6">
+
+                    <!-- TAB 1: CHỌN MẪU NỀN (TEMPLATES) -->
+                    <div id="panel-template" class="tab-panel space-y-5">
+                        <div>
+                            <h2 class="text-base font-bold text-red-900 flex items-center gap-2 mb-1">
+                                <i data-lucide="palette" class="w-4 h-4 text-red-700"></i>
+                                Chọn Phong Cách Thiệp Tết
+                            </h2>
+                            <p class="text-xs text-stone-500 mb-4">Mỗi mẫu nền đi kèm họa tiết và bảng màu hài hòa riêng biệt.</p>
+
+                            <div id="template-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <!-- Render bằng JS -->
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-stone-100">
+                            <label class="block text-sm font-semibold text-stone-700 mb-2">Khung viền nghệ thuật</label>
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <button onclick="setBorderStyle('double')" id="border-double" class="border-opt active py-2.5 px-3 rounded-xl border-2 border-red-700 bg-red-50 text-red-900 text-xs font-semibold transition cursor-pointer">
+                                    Viền Đôi Cổ Điển
+                                </button>
+                                <button onclick="setBorderStyle('corner')" id="border-corner" class="border-opt py-2.5 px-3 rounded-xl border border-stone-200 hover:border-red-300 text-stone-700 text-xs font-semibold transition cursor-pointer">
+                                    Hoa Góc Truyền Thống
+                                </button>
+                                <button onclick="setBorderStyle('minimal')" id="border-minimal" class="border-opt py-2.5 px-3 rounded-xl border border-stone-200 hover:border-red-300 text-stone-700 text-xs font-semibold transition cursor-pointer">
+                                    Tối Giản Hiện Đại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: TÙY CHỈNH NỘI DUNG & LỜI CHÚC -->
+                    <div id="panel-content" class="tab-panel hidden space-y-4">
+                        <!-- Tiêu đề thiệp -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="input-title" class="text-sm font-semibold text-red-900">Tiêu đề chính</label>
+                                <span class="text-[11px] text-stone-400">Chọn nhanh hoặc tự nhập</span>
+                            </div>
+                            <input type="text" id="input-title" value="Chúc Mừng Năm Mới" oninput="updateCardText()"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none text-sm font-medium transition"
+                                placeholder="Nhập tiêu đề thiệp...">
+                            <div class="flex flex-wrap gap-1.5 mt-2">
+                                <button onclick="setQuickTitle('Chúc Mừng Năm Mới')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition cursor-pointer">Chúc Mừng Năm Mới</button>
+                                <button onclick="setQuickTitle('An Khang Thịnh Vượng')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition cursor-pointer">An Khang Thịnh Vượng</button>
+                                <button onclick="setQuickTitle('Vạn Sự Như Ý')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition cursor-pointer">Vạn Sự Như Ý</button>
+                                <button onclick="setQuickTitle('Tân Niên Đại Cát')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition cursor-pointer">Tân Niên Đại Cát</button>
+                            </div>
+                        </div>
+
+                        <!-- Tên người nhận -->
+                        <div>
+                            <label for="input-recipient" class="block text-sm font-semibold text-red-900 mb-1.5">Lời chào / Tên người nhận</label>
+                            <input type="text" id="input-recipient" value="Kính gửi Gia đình thân yêu," oninput="updateCardText()"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none text-sm transition"
+                                placeholder="Ví dụ: Kính gửi Ông Bà, Thân tặng Bạn...">
+                        </div>
+
+                        <!-- Lời chúc Tết theo chủ đề -->
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                <label for="input-message" class="text-sm font-semibold text-red-900">Nội dung lời chúc</label>
+                                <select id="wish-category" onchange="renderWishSuggestions()" class="text-xs bg-red-50 border border-red-200 text-red-900 font-medium rounded-lg px-2.5 py-1 outline-none cursor-pointer">
+                                    <option value="family">🏡 Chủ đề: Gia đình & Ông Bà</option>
+                                    <option value="friends">🥂 Chủ đề: Bạn bè & Người thân</option>
+                                    <option value="work">💼 Chủ đề: Đồng nghiệp & Sếp</option>
+                                    <option value="love">🌸 Chủ đề: Người yêu & Thương mến</option>
+                                </select>
+                            </div>
+                            <textarea id="input-message" rows="3" oninput="updateCardText()"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none text-sm leading-relaxed transition"
+                                placeholder="Nhập lời chúc Tết của bạn...">Năm mới xuân sang, kính chúc gia đình ta luôn dồi dào sức khỏe, vạn sự bình an, tài lộc đầy nhà, tiếng cười rộn rã suốt bốn mùa!</textarea>
+
+                            <!-- Gợi ý câu chúc theo chủ đề -->
+                            <div id="wish-suggestions" class="mt-2 space-y-1.5 max-h-32 overflow-y-auto pr-1">
+                                <!-- Render bằng JS -->
+                            </div>
+                        </div>
+
+                        <!-- Chữ ký / Người gửi -->
+                        <div>
+                            <label for="input-sender" class="block text-sm font-semibold text-red-900 mb-1.5">Chữ ký / Tên người gửi</label>
+                            <input type="text" id="input-sender" value="Xuân Bính Ngọ 2026 • Thân ái" oninput="updateCardText()"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none text-sm transition"
+                                placeholder="Nhập tên của bạn...">
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: KIỂU CHỮ & MÀU SẮC -->
+                    <div id="panel-typography" class="tab-panel hidden space-y-5">
+                        <!-- Font chữ tiêu đề -->
+                        <div>
+                            <label class="block text-sm font-semibold text-red-900 mb-2">Phông chữ Tiêu đề (Hỗ trợ tiếng Việt)</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <button onclick="setTitleFont('font-calligraphy')" id="tfont-font-calligraphy" class="tfont-btn active p-3 rounded-xl border-2 border-red-700 bg-red-50 text-left transition cursor-pointer">
+                                    <div class="font-calligraphy text-xl text-red-900">Thư Pháp Mềm Mại</div>
+                                    <div class="text-[11px] text-stone-500">Dancing Script • Truyền thống</div>
+                                </button>
+                                <button onclick="setTitleFont('font-luxury')" id="tfont-font-luxury" class="tfont-btn p-3 rounded-xl border border-stone-200 hover:border-red-300 text-left transition cursor-pointer">
+                                    <div class="font-luxury text-lg font-bold text-stone-800">Sang Trọng Quý Phái</div>
+                                    <div class="text-[11px] text-stone-500">Playfair Display • Cổ điển</div>
+                                </button>
+                                <button onclick="setTitleFont('font-vibes')" id="tfont-font-vibes" class="tfont-btn p-3 rounded-xl border border-stone-200 hover:border-red-300 text-left transition cursor-pointer">
+                                    <div class="font-vibes text-2xl text-stone-800">Nét Bút Bay Bổng</div>
+                                    <div class="text-[11px] text-stone-500">Great Vibes • Nghệ thuật</div>
+                                </button>
+                                <button onclick="setTitleFont('font-geometric')" id="tfont-font-geometric" class="tfont-btn p-3 rounded-xl border border-stone-200 hover:border-red-300 text-left transition cursor-pointer">
+                                    <div class="font-geometric text-base font-bold text-stone-800">Hiện Đại Tinh Tế</div>
+                                    <div class="text-[11px] text-stone-500">Montserrat • Rõ nét</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Màu sắc chữ -->
+                        <div>
+                            <label class="block text-sm font-semibold text-red-900 mb-2">Màu sắc chữ trên thiệp</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                <button onclick="setTextColor('gold')" id="color-gold" class="color-btn active flex items-center gap-2 p-2.5 rounded-xl border-2 border-red-700 bg-amber-50/70 transition cursor-pointer">
+                                    <span class="w-6 h-6 rounded-full bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-600 border border-amber-700/30 shrink-0"></span>
+                                    <span class="text-xs font-semibold text-stone-800">Vàng Kim</span>
+                                </button>
+                                <button onclick="setTextColor('cream')" id="color-cream" class="color-btn flex items-center gap-2 p-2.5 rounded-xl border border-stone-200 hover:border-red-300 transition cursor-pointer">
+                                    <span class="w-6 h-6 rounded-full bg-[#fffbeb] border border-stone-300 shrink-0"></span>
+                                    <span class="text-xs font-semibold text-stone-800">Trắng Kem</span>
+                                </button>
+                                <button onclick="setTextColor('crimson')" id="color-crimson" class="color-btn flex items-center gap-2 p-2.5 rounded-xl border border-stone-200 hover:border-red-300 transition cursor-pointer">
+                                    <span class="w-6 h-6 rounded-full bg-[#881337] border border-red-900/30 shrink-0"></span>
+                                    <span class="text-xs font-semibold text-stone-800">Đỏ Thẫm</span>
+                                </button>
+                                <button onclick="setTextColor('wood')" id="color-wood" class="color-btn flex items-center gap-2 p-2.5 rounded-xl border border-stone-200 hover:border-red-300 transition cursor-pointer">
+                                    <span class="w-6 h-6 rounded-full bg-[#451a03] border border-amber-950/30 shrink-0"></span>
+                                    <span class="text-xs font-semibold text-stone-800">Nâu Gỗ</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cỡ chữ & Căn lề -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-100">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-700 mb-2">Kích thước nội dung</label>
+                                <div class="flex bg-stone-100 p-1 rounded-xl">
+                                    <button onclick="setTextSize('sm')" id="size-sm" class="size-btn flex-1 py-1.5 text-xs font-semibold rounded-lg text-stone-600 transition cursor-pointer">Nhỏ</button>
+                                    <button onclick="setTextSize('md')" id="size-md" class="size-btn active flex-1 py-1.5 text-xs font-semibold rounded-lg bg-white text-red-800 shadow-sm transition cursor-pointer">Vừa</button>
+                                    <button onclick="setTextSize('lg')" id="size-lg" class="size-btn flex-1 py-1.5 text-xs font-semibold rounded-lg text-stone-600 transition cursor-pointer">Lớn</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-700 mb-2">Căn lề lời chúc</label>
+                                <div class="flex bg-stone-100 p-1 rounded-xl">
+                                    <button onclick="setTextAlign('text-left')" id="align-text-left" class="align-btn flex-1 py-1.5 text-xs font-semibold rounded-lg text-stone-600 flex items-center justify-center transition cursor-pointer">
+                                        <i data-lucide="align-left" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="setTextAlign('text-center')" id="align-text-center" class="align-btn active flex-1 py-1.5 text-xs font-semibold rounded-lg bg-white text-red-800 shadow-sm flex items-center justify-center transition cursor-pointer">
+                                        <i data-lucide="align-center" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="setTextAlign('text-right')" id="align-text-right" class="align-btn flex-1 py-1.5 text-xs font-semibold rounded-lg text-stone-600 flex items-center justify-center transition cursor-pointer">
+                                        <i data-lucide="align-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: HỌA TIẾT & STICKER TRANG TRÍ -->
+                    <div id="panel-decor" class="tab-panel hidden space-y-5">
+                        <div>
+                            <h3 class="text-sm font-semibold text-red-900 mb-1">Biểu tượng Tết trang trí trên thiệp</h3>
+                            <p class="text-xs text-stone-500 mb-3">Bật hoặc tắt các họa tiết truyền thống để làm sinh động tấm thiệp.</p>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="sticker-controls">
+                                <!-- Render bằng JS -->
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-stone-100">
+                            <label class="block text-sm font-semibold text-red-900 mb-2">Huy hiệu năm mới (Phía trên tiêu đề)</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setBadgeText('XUÂN BÍNH NGỌ 2026')" class="badge-opt py-2 px-2 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-[11px] font-bold transition cursor-pointer">
+                                    XUÂN 2026
+                                </button>
+                                <button onclick="setBadgeText('CUNG CHÚC TÂN XUÂN')" class="badge-opt py-2 px-2 rounded-xl border border-stone-200 hover:border-amber-300 text-stone-700 text-[11px] font-bold transition cursor-pointer">
+                                    TÂN XUÂN
+                                </button>
+                                <button onclick="setBadgeText('')" class="badge-opt py-2 px-2 rounded-xl border border-stone-200 hover:border-amber-300 text-stone-500 text-[11px] font-medium transition cursor-pointer">
+                                    Ẩn huy hiệu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KHUNG XEM TRƯỚC TRỰC TIẾP & XUẤT THIỆP (6 cột trên màn hình lớn) -->
+            <div class="lg:col-span-6 xl:col-span-6 flex flex-col items-center">
+
+                <!-- Thanh công cụ hiệu ứng xem trước -->
+                <div class="w-full max-w-[460px] flex flex-wrap items-center justify-between gap-2 mb-3 bg-white/90 backdrop-blur px-4 py-2.5 rounded-2xl border border-amber-200/80 shadow-sm">
+                    <span class="text-xs font-bold text-red-900 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Xem trước trực tiếp
+                    </span>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Nút bật/tắt hoa rơi & pháo hoa -->
+                        <button onclick="toggleFestiveEffect()" id="btn-effect" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 transition cursor-pointer">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+                            <span id="effect-label">Hoa xuân rơi: BẬT</span>
+                        </button>
+
+                        <!-- Nút phát lại hiệu ứng mở thiệp -->
+                        <button onclick="replayOpenAnimation()" class="p-1.5 rounded-xl bg-stone-100 hover:bg-red-100 text-stone-700 hover:text-red-800 transition cursor-pointer" title="Xem hiệu ứng mở thiệp">
+                            <i data-lucide="play" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VÙNG CHỨA TẤM THIỆP (SẼ ĐƯỢC CHỤP ẢNH XUẤT PNG) -->
+                <div id="card-wrapper" class="w-full flex justify-center items-center py-1">
+                    <div id="card-preview-container" class="relative rounded-3xl overflow-hidden shadow-2xl gold-glow select-none animate-card-open bg-gradient-to-br from-red-800 via-red-700 to-red-950">
+
+                        <!-- Lớp họa tiết nền chìm -->
+                        <div id="card-pattern" class="absolute inset-0 pattern-waves opacity-90 pointer-events-none"></div>
+
+                        <!-- Ánh sáng tỏa trung tâm -->
+                        <div id="card-glow" class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(253,224,71,0.18)_0%,transparent_70%)] pointer-events-none"></div>
+
+                        <!-- Canvas hiệu ứng hoa mai/đào rơi & pháo hoa nhẹ (không làm ảnh hưởng chữ) -->
+                        <canvas id="festive-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+                        <!-- Khung viền trang trí bên trong thiệp -->
+                        <div id="card-inner-frame" class="relative z-20 w-full h-full p-5 sm:p-7 flex flex-col justify-between">
+                            <!-- Viền đôi / Viền hoa góc động -->
+                            <div id="card-border-box" class="w-full h-full border-2 border-amber-300/60 rounded-2xl p-5 sm:p-6 flex flex-col justify-between relative">
+
+                                <!-- Hoa văn 4 góc (hiện khi chọn kiểu viền góc) -->
+                                <div id="corner-ornaments" class="hidden pointer-events-none">
+                                    <svg class="w-10 h-10 text-amber-300/80 absolute top-2 left-2" viewBox="0 0 40 40" fill="none">
+                                        <path d="M2 24V6C2 3.79086 3.79086 2 6 2H24M8 20V10C8 8.89543 8.89543 8 10 8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+                                    </svg>
+                                    <svg class="w-10 h-10 text-amber-300/80 absolute top-2 right-2 rotate-90" viewBox="0 0 40 40" fill="none">
+                                        <path d="M2 24V6C2 3.79086 3.79086 2 6 2H24M8 20V10C8 8.89543 8.89543 8 10 8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+                                    </svg>
+                                    <svg class="w-10 h-10 text-amber-300/80 absolute bottom-2 right-2 rotate-180" viewBox="0 0 40 40" fill="none">
+                                        <path d="M2 24V6C2 3.79086 3.79086 2 6 2H24M8 20V10C8 8.89543 8.89543 8 10 8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+                                    </svg>
+                                    <svg class="w-10 h-10 text-amber-300/80 absolute bottom-2 left-2 -rotate-90" viewBox="0 0 40 40" fill="none">
+                                        <path d="M2 24V6C2 3.79086 3.79086 2 6 2H24M8 20V10C8 8.89543 8.89543 8 10 8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+                                    </svg>
+                                </div>
+
+                                <!-- CÁC STICKER / HỌA TIẾT TẾT TRÊN THIỆP -->
+                                <!-- Đèn lồng treo góc trên -->
+                                <div id="sticker-lantern" class="absolute -top-1 left-4 sm:left-6 flex gap-2 z-20 animate-swing">
+                                    <svg class="w-9 h-12 sm:w-11 sm:h-14 drop-shadow-md" viewBox="0 0 60 80" fill="none">
+                                        <line x1="30" y1="0" x2="30" y2="12" stroke="#FBBF24" stroke-width="2"/>
+                                        <rect x="22" y="10" width="16" height="5" rx="2" fill="#F59E0B"/>
+                                        <ellipse cx="30" cy="34" rx="20" ry="22" fill="#DC2626" stroke="#FBBF24" stroke-width="2"/>
+                                        <ellipse cx="30" cy="34" rx="11" ry="22" stroke="#FDE047" stroke-width="1.2" stroke-opacity="0.7"/>
+                                        <rect x="22" y="54" width="16" height="5" rx="2" fill="#F59E0B"/>
+                                        <line x1="30" y1="59" x2="30" y2="76" stroke="#FBBF24" stroke-width="2.5"/>
+                                        <line x1="26" y1="59" x2="24" y2="73" stroke="#F59E0B" stroke-width="1.5"/>
+                                        <line x1="34" y1="59" x2="36" y2="73" stroke="#F59E0B" stroke-width="1.5"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Cành hoa mai vàng góc phải trên -->
+                                <div id="sticker-apricot" class="absolute top-2 right-2 sm:top-3 sm:right-3 z-20 pointer-events-none">
+                                    <svg class="w-16 h-16 sm:w-20 sm:h-20 drop-shadow" viewBox="0 0 100 100" fill="none">
+                                        <path d="M95 5 C70 25, 55 45, 25 65" stroke="#78350F" stroke-width="3.5" stroke-linecap="round"/>
+                                        <path d="M68 28 C55 22, 42 25, 32 18" stroke="#78350F" stroke-width="2.5" stroke-linecap="round"/>
+                                        <!-- Hoa mai 1 -->
+                                        <g transform="translate(56, 38)">
+                                            <circle cx="0" cy="-8" r="6" fill="#FACC15"/>
+                                            <circle cx="8" cy="-2" r="6" fill="#FACC15"/>
+                                            <circle cx="5" cy="7" r="6" fill="#FACC15"/>
+                                            <circle cx="-5" cy="7" r="6" fill="#FACC15"/>
+                                            <circle cx="-8" cy="-2" r="6" fill="#FACC15"/>
+                                            <circle cx="0" cy="0" r="3.5" fill="#B45309"/>
+                                        </g>
+                                        <!-- Hoa mai 2 -->
+                                        <g transform="translate(30, 58) scale(0.8)">
+                                            <circle cx="0" cy="-8" r="6" fill="#FDE047"/>
+                                            <circle cx="8" cy="-2" r="6" fill="#FDE047"/>
+                                            <circle cx="5" cy="7" r="6" fill="#FDE047"/>
+                                            <circle cx="-5" cy="7" r="6" fill="#FDE047"/>
+                                            <circle cx="-8" cy="-2" r="6" fill="#FDE047"/>
+                                            <circle cx="0" cy="0" r="3.5" fill="#B45309"/>
+                                        </g>
+                                        <!-- Nụ hoa -->
+                                        <circle cx="34" cy="18" r="3.5" fill="#FACC15"/>
+                                        <circle cx="80" cy="16" r="4" fill="#FDE047"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Hoa đào hồng (ẩn mặc định, bật trong tab Trang Trí) -->
+                                <div id="sticker-peach" class="hidden absolute top-2 right-2 sm:top-3 sm:right-3 z-20 pointer-events-none">
+                                    <svg class="w-16 h-16 sm:w-20 sm:h-20 drop-shadow" viewBox="0 0 100 100" fill="none">
+                                        <path d="M95 8 C72 28, 52 42, 22 62" stroke="#5C2D16" stroke-width="3.5" stroke-linecap="round"/>
+                                        <g transform="translate(55, 36)">
+                                            <circle cx="0" cy="-8" r="6" fill="#F472B6"/>
+                                            <circle cx="8" cy="-2" r="6" fill="#F9A8D4"/>
+                                            <circle cx="5" cy="7" r="6" fill="#F472B6"/>
+                                            <circle cx="-5" cy="7" r="6" fill="#F9A8D4"/>
+                                            <circle cx="-8" cy="-2" r="6" fill="#F472B6"/>
+                                            <circle cx="0" cy="0" r="3.5" fill="#BE185D"/>
+                                        </g>
+                                        <g transform="translate(28, 56) scale(0.8)">
+                                            <circle cx="0" cy="-8" r="6" fill="#F9A8D4"/>
+                                            <circle cx="8" cy="-2" r="6" fill="#F472B6"/>
+                                            <circle cx="5" cy="7" r="6" fill="#F9A8D4"/>
+                                            <circle cx="-5" cy="7" r="6" fill="#F472B6"/>
+                                            <circle cx="-8" cy="-2" r="6" fill="#F9A8D4"/>
+                                            <circle cx="0" cy="0" r="3.5" fill="#BE185D"/>
+                                        </g>
+                                    </svg>
+                                </div>
+
+                                <!-- Bao lì xì góc trái dưới -->
+                                <div id="sticker-lixi" class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 pointer-events-none">
+                                    <svg class="w-11 h-14 sm:w-12 sm:h-16 -rotate-12 drop-shadow-md" viewBox="0 0 60 80" fill="none">
+                                        <rect x="8" y="8" width="44" height="64" rx="6" fill="#E11D48" stroke="#FBBF24" stroke-width="2"/>
+                                        <path d="M8 22 Q30 36 52 22" stroke="#FBBF24" stroke-width="2" fill="#BE123C"/>
+                                        <circle cx="30" cy="30" r="7" fill="#FACC15"/>
+                                        <text x="30" y="33.5" text-anchor="middle" fill="#991B1B" font-size="9" font-weight="bold">LỘC</text>
+                                    </svg>
+                                </div>
+
+                                <!-- Bánh chưng xanh góc phải dưới -->
+                                <div id="sticker-banhchung" class="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 pointer-events-none">
+                                    <svg class="w-12 h-12 sm:w-14 sm:h-14 rotate-6 drop-shadow-md" viewBox="0 0 70 70" fill="none">
+                                        <rect x="12" y="14" width="46" height="44" rx="6" fill="#15803D" stroke="#BBF7D0" stroke-width="1.5"/>
+                                        <rect x="16" y="18" width="38" height="36" rx="4" fill="#16A34A"/>
+                                        <!-- Dây lạt buộc -->
+                                        <line x1="28" y1="14" x2="28" y2="58" stroke="#FEF08A" stroke-width="2.5"/>
+                                        <line x1="42" y1="14" x2="42" y2="58" stroke="#FEF08A" stroke-width="2.5"/>
+                                        <line x1="12" y1="29" x2="58" y2="29" stroke="#FEF08A" stroke-width="2.5"/>
+                                        <line x1="12" y1="43" x2="58" y2="43" stroke="#FEF08A" stroke-width="2.5"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Câu đối đỏ hai bên (ẩn mặc định) -->
+                                <div id="sticker-couplet" class="hidden absolute inset-y-16 inset-x-1.5 flex justify-between items-center pointer-events-none z-10 opacity-90">
+                                    <div class="bg-red-700 border border-amber-400 px-1.5 py-2.5 rounded text-[9px] leading-tight font-bold text-amber-300 shadow flex flex-col items-center">
+                                        <span>T</span><span>Â</span><span>N</span><span class="my-0.5">•</span><span>N</span><span>I</span><span>Ê</span><span>N</span>
+                                    </div>
+                                    <div class="bg-red-700 border border-amber-400 px-1.5 py-2.5 rounded text-[9px] leading-tight font-bold text-amber-300 shadow flex flex-col items-center">
+                                        <span>Đ</span><span>Ạ</span><span>I</span><span class="my-0.5">•</span><span>C</span><span>Á</span><span>T</span>
+                                    </div>
+                                </div>
+
+                                <!-- PHẦN NỘI DUNG CHỮ TRÊN THIỆP -->
+                                <!-- 1. Phần đầu: Huy hiệu & Tiêu đề -->
+                                <div class="text-center pt-5 sm:pt-6 z-20">
+                                    <div id="card-badge-wrapper" class="inline-block mb-2">
+                                        <span id="card-badge" class="inline-block px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold tracking-widest uppercase border border-amber-300/60 bg-amber-400/15 text-amber-200">
+                                            XUÂN BÍNH NGỌ 2026
+                                        </span>
+                                    </div>
+
+                                    <h2 id="card-title" class="font-calligraphy text-3xl sm:text-4xl md:text-[42px] font-bold leading-tight text-amber-300 drop-shadow-sm px-2">
+                                        Chúc Mừng Năm Mới
+                                    </h2>
+
+                                    <!-- Đường phân cách hoa văn -->
+                                    <div class="flex items-center justify-center gap-2 mt-2.5 opacity-80">
+                                        <span class="h-[1px] w-10 bg-current"></span>
+                                        <span class="text-xs">❖</span>
+                                        <span class="h-[1px] w-10 bg-current"></span>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Phần giữa: Người nhận & Lời chúc -->
+                                <div id="card-body-block" class="my-auto py-3 px-2 sm:px-4 text-center z-20 space-y-2.5">
+                                    <p id="card-recipient" class="font-luxury italic text-sm sm:text-base font-semibold text-amber-200">
+                                        Kính gửi Gia đình thân yêu,
+                                    </p>
+
+                                    <p id="card-message" class="font-modern text-sm sm:text-[15px] leading-relaxed text-amber-50 whitespace-pre-line">
+                                        Năm mới xuân sang, kính chúc gia đình ta luôn dồi dào sức khỏe, vạn sự bình an, tài lộc đầy nhà, tiếng cười rộn rã suốt bốn mùa!
+                                    </p>
+                                </div>
+
+                                <!-- 3. Phần cuối: Chữ ký -->
+                                <div class="text-center pb-5 sm:pb-6 z-20">
+                                    <p id="card-sender" class="font-luxury text-xs sm:text-sm font-semibold tracking-wide text-amber-300/95">
+                                        Xuân Bính Ngọ 2026 • Thân ái
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Các nút hành động chính bên dưới thiệp -->
+                <div class="w-full max-w-[460px] mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="downloadCard()" id="btn-download-main" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-800 via-red-700 to-red-800 hover:from-red-700 hover:to-red-600 active:scale-[0.98] text-amber-200 font-bold py-3.5 px-5 rounded-2xl shadow-lg border border-amber-400/40 transition cursor-pointer">
+                        <i data-lucide="image-down" class="w-5 h-5 text-amber-300"></i>
+                        <span>Tải Thiệp Về Máy (PNG)</span>
+                    </button>
+
+                    <button onclick="copyWishText()" class="w-full flex items-center justify-center gap-2 bg-white hover:bg-amber-50 active:scale-[0.98] text-red-900 font-semibold py-3.5 px-5 rounded-2xl shadow-md border border-amber-300 transition cursor-pointer">
+                        <i data-lucide="copy" class="w-4 h-4 text-red-700"></i>
+                        <span>Sao Chép Lời Chúc</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-4 text-center text-xs text-stone-500 border-t border-amber-200/50 bg-white/40">
+        <p>Chúc Mừng Năm Mới • An Khang Thịnh Vượng • Vạn Sự Như Ý 🌸</p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. DỮ LIỆU CẤU HÌNH MẪU THIỆP & LỜI CHÚC
+        // ==========================================
+
+        const TEMPLATES = [
+            {
+                id: 'traditional-red',
+                name: 'Đỏ Truyền Thống',
+                desc: 'Sắc đỏ son & hoa mai vàng',
+                bgClass: 'bg-gradient-to-br from-red-800 via-red-700 to-red-950',
+                patternClass: 'pattern-waves',
+                borderColor: 'border-amber-300/65',
+                defaultTextColor: 'gold',
+                previewBg: 'linear-gradient(135deg, #991b1b, #450a0a)',
+                previewAccent: '#fcd34d'
+            },
+            {
+                id: 'velvet-crimson',
+                name: 'Đỏ Nhung Thư Pháp',
+                desc: 'Trầm ấm, sang trọng cổ điển',
+                bgClass: 'bg-gradient-to-b from-[#6b0f1a] via-[#881337] to-[#3b0710]',
+                patternClass: 'pattern-dots',
+                borderColor: 'border-amber-200/60',
+                defaultTextColor: 'cream',
+                previewBg: 'linear-gradient(135deg, #881337, #3b0710)',
+                previewAccent: '#fef3c7'
+            },
+            {
+                id: 'jade-emerald',
+                name: 'Xanh Ngọc Bích',
+                desc: 'Thanh lịch, bình an tươi mới',
+                bgClass: 'bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-950',
+                patternClass: 'pattern-waves',
+                borderColor: 'border-amber-300/60',
+                defaultTextColor: 'gold',
+                previewBg: 'linear-gradient(135deg, #065f46, #022c22)',
+                previewAccent: '#fde047'
+            },
+            {
+                id: 'royal-gold',
+                name: 'Vàng Hoàng Gia',
+                desc: 'Phú quý, rạng rỡ sắc xuân',
+                bgClass: 'bg-gradient-to-br from-amber-200 via-yellow-100 to-amber-300',
+                patternClass: 'pattern-dots',
+                borderColor: 'border-red-800/50',
+                defaultTextColor: 'crimson',
+                previewBg: 'linear-gradient(135deg, #fde68a, #f59e0b)',
+                previewAccent: '#881337'
+            },
+            {
+                id: 'pastel-peach',
+                name: 'Hồng Đào Mùa Xuân',
+                desc: 'Nhẹ nhàng, ngọt ngào ấm áp',
+                bgClass: 'bg-gradient-to-br from-rose-100 via-pink-50 to-amber-100',
+                patternClass: 'pattern-grid',
+                borderColor: 'border-rose-700/40',
+                defaultTextColor: 'crimson',
+                previewBg: 'linear-gradient(135deg, #ffe4e6, #fecdd3)',
+                previewAccent: '#9f1239'
+            },
+            {
+                id: 'midnight-lantern',
+                name: 'Đêm Hội Hoa Đăng',
+                desc: 'Huyền bí, lung linh ánh vàng',
+                bgClass: 'bg-gradient-to-br from-slate-900 via-indigo-950 to-red-950',
+                patternClass: 'pattern-dots',
+                borderColor: 'border-amber-400/60',
+                defaultTextColor: 'gold',
+                previewBg: 'linear-gradient(135deg, #1e1b4b, #450a0a)',
+                previewAccent: '#fbbf24'
+            }
+        ];
+
+        const TEXT_COLORS = {
+            gold: {
+                title: 'text-amber-300',
+                recipient: 'text-amber-200',
+                body: 'text-amber-50',
+                sender: 'text-amber-300',
+                badge: 'border-amber-300/60 bg-amber-400/15 text-amber-200',
+                divider: 'text-amber-300'
+            },
+            cream: {
+                title: 'text-amber-50',
+                recipient: 'text-amber-100',
+                body: 'text-white',
+                sender: 'text-amber-100',
+                badge: 'border-amber-100/50 bg-white/10 text-amber-50',
+                divider: 'text-amber-100'
+            },
+            crimson: {
+                title: 'text-red-900',
+                recipient: 'text-red-800',
+                body: 'text-stone-800',
+                sender: 'text-red-900',
+                badge: 'border-red-800/40 bg-red-800/10 text-red-900',
+                divider: 'text-red-800'
+            },
+            wood: {
+                title: 'text-amber-950',
+                recipient: 'text-amber-900',
+                body: 'text-stone-800',
+                sender: 'text-amber-950',
+                badge: 'border-amber-900/40 bg-amber-900/10 text-amber-950',
+                divider: 'text-amber-900'
+            }
+        };
+
+        const WISH_BANK = {
+            family: [
+                "Năm mới xuân sang, kính chúc gia đình ta luôn dồi dào sức khỏe, vạn sự bình an, tài lộc đầy nhà, tiếng cười rộn rã suốt bốn mùa!",
+                "Tết đến xuân về, con kính chúc Ông Bà, Bố Mẹ sống lâu trăm tuổi, tâm hồn luôn vui tươi, mạnh khỏe và mãi là điểm tựa ấm áp của chúng con.",
+                "Chúc cả nhà năm mới sum vầy hạnh phúc, phúc lộc thọ toàn, mọi điều hanh thông và luôn yêu thương gắn kết bên nhau."
+            ],
+            friends: [
+                "Chúc bạn năm mới tiền vào như nước, tiền ra nhỏ giọt, sự nghiệp thăng hoa, tình duyên nở rộ và luôn giữ mãi nụ cười rạng rỡ!",
+                "Tân niên chúc bạn sức khỏe dẻo dai, công việc thuận buồm xuôi gió, đi đâu cũng gặp quý nhân, làm gì cũng gặt hái thành công!",
+                "Năm mới đến rồi, chúc cho mọi dự định của bạn đều thành hiện thực, mỗi ngày trôi qua đều tràn đầy năng lượng và niềm vui."
+            ],
+            work: [
+                "Nhân dịp năm mới, kính chúc Anh/Chị cùng gia đình một năm An Khang Thịnh Vượng, Vạn Sự Như Ý, sự nghiệp vững vàng và gặt hái nhiều thắng lợi mới.",
+                "Chúc mừng năm mới! Kính chúc Quý đối tác và Đồng nghiệp một năm bứt phá thành công, tài lộc dồi dào, hợp tác bền chặt.",
+                "Tân xuân chúc Anh/Chị sức khỏe dồi dào, trí tuệ minh mẫn, dẫn dắt tập thể ngày càng phát triển rực rỡ hơn nữa!"
+            ],
+            love: [
+                "Cảm ơn vì đã cùng nhau đi qua một năm thật đẹp. Chúc năm mới của chúng mình luôn ngập tràn yêu thương, bình yên và mãi nắm tay nhau thật chặt nhé!",
+                "Xuân này chẳng cần gì nhiều, chỉ cần có người thương luôn khỏe mạnh, bình an và mỉm cười hạnh phúc mỗi ngày. Chúc mừng năm mới!",
+                "Chúc tình yêu của chúng ta năm mới thêm ngọt ngào, thấu hiểu và cùng nhau viết tiếp thật nhiều kỷ niệm đáng nhớ."
+            ]
+        };
+
+        const STICKERS = [
+            { id: 'lantern', name: 'Đèn Lồng Đỏ', icon: '🏮', active: true },
+            { id: 'apricot', name: 'Hoa Mai Vàng', icon: '🌼', active: true },
+            { id: 'peach', name: 'Hoa Đào Xuân', icon: '🌸', active: false },
+            { id: 'lixi', name: 'Bao Lì Xì', icon: '🧧', active: true },
+            { id: 'banhchung', name: 'Bánh Chưng', icon: '🟩', active: true },
+            { id: 'couplet', name: 'Câu Đối Tết', icon: '📜', active: false }
+        ];
+
+        // Trạng thái hiện tại của ứng dụng
+        let state = {
+            templateId: 'traditional-red',
+            borderStyle: 'double',
+            titleFont: 'font-calligraphy',
+            textColor: 'gold',
+            textSize: 'md',
+            textAlign: 'text-center',
+            festiveEffect: true
+        };
+
+        // ==========================================
+        // 2. KHỞI TẠO & RENDER GIAO DIỆN ĐIỀU KHIỂN
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderTemplates();
+            renderWishSuggestions();
+            renderStickerControls();
+            applyTemplate('traditional-red', false);
+            initFestiveCanvas();
+        });
+
+        // Chuyển đổi giữa các Tab điều khiển
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`panel-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-red-800', 'text-amber-200', 'shadow-sm');
+                btn.classList.add('text-stone-600', 'hover:bg-red-100/60');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.remove('text-stone-600', 'hover:bg-red-100/60');
+            activeBtn.classList.add('bg-red-800', 'text-amber-200', 'shadow-sm');
+        }
+
+        // Render danh sách mẫu nền
+        function renderTemplates() {
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = TEMPLATES.map(tpl => `
+                <button onclick="applyTemplate('${tpl.id}')" id="tpl-btn-${tpl.id}"
+                    class="tpl-card group relative p-2.5 rounded-2xl border-2 text-left transition-all cursor-pointer ${state.templateId === tpl.id ? 'border-red-700 bg-red-50/80 shadow-md' : 'border-stone-200 hover:border-red-300 bg-white'}">
+                    <div class="w-full h-14 rounded-xl mb-2 flex items-center justify-center shadow-inner relative overflow-hidden" style="background: ${tpl.previewBg}">
+                        <span class="font-calligraphy text-lg font-bold" style="color: ${tpl.previewAccent}">Tết Việt</span>
+                    </div>
+                    <div class="text-xs font-bold text-stone-800 truncate">${tpl.name}</div>
+                    <div class="text-[10px] text-stone-500 truncate">${tpl.desc}</div>
+                </button>
+            `).join('');
+        }
+
+        // Áp dụng mẫu nền
+        function applyTemplate(templateId, autoColor = true) {
+            const tpl = TEMPLATES.find(t => t.id === templateId);
+            if (!tpl) return;
+            state.templateId = templateId;
+
+            const container = document.getElementById('card-preview-container');
+            const pattern = document.getElementById('card-pattern');
+            const borderBox = document.getElementById('card-border-box');
+
+            // Cập nhật nền
+            container.className = `relative rounded-3xl overflow-hidden shadow-2xl gold-glow select-none ${tpl.bgClass}`;
+            pattern.className = `absolute inset-0 ${tpl.patternClass} opacity-90 pointer-events-none`;
+
+            // Cập nhật viền
+            borderBox.classList.remove('border-amber-300/65', 'border-amber-200/60', 'border-amber-300/60', 'border-red-800/50', 'border-rose-700/40', 'border-amber-400/60');
+            borderBox.classList.add(tpl.borderColor);
+
+            // Cập nhật màu hoa văn góc nếu có
+            const corners = document.getElementById('corner-ornaments');
+            if (tpl.defaultTextColor === 'crimson') {
+                corners.classList.replace('text-amber-300/80', 'text-red-800/70');
+            } else {
+                corners.classList.replace('text-red-800/70', 'text-amber-300/80');
+            }
+
+            if (autoColor) {
+                setTextColor(tpl.defaultTextColor);
+            }
+            renderTemplates();
+        }
+
+        // Chọn kiểu viền khung thiệp
+        function setBorderStyle(style) {
+            state.borderStyle = style;
+            const box = document.getElementById('card-border-box');
+            const corners = document.getElementById('corner-ornaments');
+
+            document.querySelectorAll('.border-opt').forEach(btn => {
+                btn.classList.remove('border-2', 'border-red-700', 'bg-red-50', 'text-red-900');
+                btn.classList.add('border', 'border-stone-200', 'text-stone-700');
+            });
+            const activeBtn = document.getElementById(`border-${style}`);
+            activeBtn.classList.remove('border', 'border-stone-200', 'text-stone-700');
+            activeBtn.classList.add('border-2', 'border-red-700', 'bg-red-50', 'text-red-900');
+
+            if (style === 'double') {
+                box.style.borderStyle = 'double';
+                box.style.borderWidth = '4px';
+                corners.classList.add('hidden');
+            } else if (style === 'corner') {
+                box.style.borderStyle = 'solid';
+                box.style.borderWidth = '1.5px';
+                corners.classList.remove('hidden');
+            } else {
+                box.style.borderStyle = 'solid';
+                box.style.borderWidth = '1px';
+                corners.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // 3. CẬP NHẬT NỘI DUNG & KIỂU CHỮ
+        // ==========================================
+
+        function updateCardText() {
+            const title = document.getElementById('input-title').value || 'Chúc Mừng Năm Mới';
+            const recipient = document.getElementById('input-recipient').value;
+            const message = document.getElementById('input-message').value;
+            const sender = document.getElementById('input-sender').value;
+
+            document.getElementById('card-title').textContent = title;
+            document.getElementById('card-recipient').textContent = recipient;
+            document.getElementById('card-message').textContent = message;
+            document.getElementById('card-sender').textContent = sender;
+        }
+
+        function setQuickTitle(text) {
+            document.getElementById('input-title').value = text;
+            updateCardText();
+        }
+
+        function renderWishSuggestions() {
+            const cat = document.getElementById('wish-category').value;
+            const list = WISH_BANK[cat] || [];
+            const container = document.getElementById('wish-suggestions');
+
+            container.innerHTML = list.map((wish, idx) => `
+                <div onclick="selectWish(${idx})" class="p-2.5 rounded-xl bg-stone-50 hover:bg-amber-50 border border-stone-200/80 hover:border-amber-300 text-xs text-stone-700 cursor-pointer transition flex items-start gap-2">
+                    <span class="text-red-600 font-bold mt-0.5">✦</span>
+                    <span class="line-clamp-2">${wish}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectWish(index) {
+            const cat = document.getElementById('wish-category').value;
+            const wish = WISH_BANK[cat][index];
+            if (wish) {
+                document.getElementById('input-message').value = wish;
+                updateCardText();
+                showToast('Đã áp dụng câu chúc Tết!');
+            }
+        }
+
+        function setTitleFont(fontClass) {
+            state.titleFont = fontClass;
+            const titleEl = document.getElementById('card-title');
+            titleEl.classList.remove('font-calligraphy', 'font-luxury', 'font-vibes', 'font-geometric');
+            titleEl.classList.add(fontClass);
+
+            document.querySelectorAll('.tfont-btn').forEach(btn => {
+                btn.classList.remove('border-2', 'border-red-700', 'bg-red-50');
+                btn.classList.add('border', 'border-stone-200');
+            });
+            const activeBtn = document.getElementById(`tfont-${fontClass}`);
+            activeBtn.classList.remove('border', 'border-stone-200');
+            activeBtn.classList.add('border-2', 'border-red-700', 'bg-red-50');
+        }
+
+        function setTextColor(colorKey) {
+            state.textColor = colorKey;
+            const palette = TEXT_COLORS[colorKey];
+            if (!palette) return;
+
+            const titleEl = document.getElementById('card-title');
+            const recEl = document.getElementById('card-recipient');
+            const msgEl = document.getElementById('card-message');
+            const sndEl = document.getElementById('card-sender');
+            const badgeEl = document.getElementById('card-badge');
+
+            // Xóa các lớp màu cũ
+            const allColorClasses = [
+                'text-amber-300', 'text-amber-200', 'text-amber-50', 'text-amber-100', 'text-white',
+                'text-red-900', 'text-red-800', 'text-stone-800', 'text-amber-950', 'text-amber-900'
+            ];
+            [titleEl, recEl, msgEl, sndEl].forEach(el => el.classList.remove(...allColorClasses));
+
+            titleEl.classList.add(palette.title);
+            recEl.classList.add(palette.recipient);
+            msgEl.classList.add(palette.body);
+            sndEl.classList.add(palette.sender);
+
+            badgeEl.className = `inline-block px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold tracking-widest uppercase border ${palette.badge}`;
+
+            // Cập nhật UI nút chọn màu
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('border-2', 'border-red-700', 'bg-amber-50/70');
+                btn.classList.add('border', 'border-stone-200');
+            });
+            const activeBtn = document.getElementById(`color-${colorKey}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border', 'border-stone-200');
+                activeBtn.classList.add('border-2', 'border-red-700', 'bg-amber-50/70');
+            }
+        }
+
+        function setTextSize(size) {
+            state.textSize = size;
+            const msgEl = document.getElementById('card-message');
+            msgEl.classList.remove('text-xs', 'sm:text-sm', 'text-sm', 'sm:text-[15px]', 'text-base', 'sm:text-lg');
+
+            if (size === 'sm') msgEl.classList.add('text-xs', 'sm:text-sm');
+            else if (size === 'md') msgEl.classList.add('text-sm', 'sm:text-[15px]');
+            else msgEl.classList.add('text-base', 'sm:text-lg');
+
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-red-800', 'shadow-sm');
+                btn.classList.add('text-stone-600');
+            });
+            const active = document.getElementById(`size-${size}`);
+            active.classList.remove('text-stone-600');
+            active.classList.add('bg-white', 'text-red-800', 'shadow-sm');
+        }
+
+        function setTextAlign(alignClass) {
+            state.textAlign = alignClass;
+            const block = document.getElementById('card-body-block');
+            block.classList.remove('text-left', 'text-center', 'text-right');
+            block.classList.add(alignClass);
+
+            document.querySelectorAll('.align-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-red-800', 'shadow-sm');
+                btn.classList.add('text-stone-600');
+            });
+            const active = document.getElementById(`align-${alignClass}`);
+            active.classList.remove('text-stone-600');
+            active.classList.add('bg-white', 'text-red-800', 'shadow-sm');
+        }
+
+        // ==========================================
+        // 4. STICKER TRANG TRÍ & HUY HIỆU
+        // ==========================================
+
+        function renderStickerControls() {
+            const container = document.getElementById('sticker-controls');
+            container.innerHTML = STICKERS.map(st => `
+                <button onclick="toggleSticker('${st.id}')" id="st-btn-${st.id}"
+                    class="flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${st.active ? 'border-red-600 bg-red-50 text-red-950 font-semibold' : 'border-stone-200 bg-white text-stone-600 hover:border-red-300'}">
+                    <span class="flex items-center gap-2 text-xs">
+                        <span class="text-base">${st.icon}</span>
+                        <span>${st.name}</span>
+                    </span>
+                    <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${st.active ? 'bg-red-700 text-white' : 'bg-stone-200 text-transparent'}">✓</span>
+                </button>
+            `).join('');
+        }
+
+        function toggleSticker(id) {
+            const sticker = STICKERS.find(s => s.id === id);
+            if (!sticker) return;
+
+            // Nếu bật hoa đào thì tự tắt hoa mai (cùng vị trí góc phải trên) cho hài hòa
+            if (id === 'peach' && !sticker.active) {
+                const apricot = STICKERS.find(s => s.id === 'apricot');
+                if (apricot) {
+                    apricot.active = false;
+                    document.getElementById('sticker-apricot').classList.add('hidden');
+                }
+            } else if (id === 'apricot' && !sticker.active) {
+                const peach = STICKERS.find(s => s.id === 'peach');
+                if (peach) {
+                    peach.active = false;
+                    document.getElementById('sticker-peach').classList.add('hidden');
+                }
+            }
+
+            sticker.active = !sticker.active;
+            const el = document.getElementById(`sticker-${id}`);
+            if (el) {
+                if (sticker.active) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            }
+            renderStickerControls();
+        }
+
+        function setBadgeText(text) {
+            const wrapper = document.getElementById('card-badge-wrapper');
+            const badge = document.getElementById('card-badge');
+            if (!text) {
+                wrapper.classList.add('hidden');
+            } else {
+                wrapper.classList.remove('hidden');
+                badge.textContent = text;
+            }
+        }
+
+        // ==========================================
+        // 5. HIỆU ỨNG HOA XUÂN RƠI & PHÁO HOA NHẸ
+        // ==========================================
+
+        let particles = [];
+        let animationFrameId = null;
+
+        function initFestiveCanvas() {
+            const canvas = document.getElementById('festive-canvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Tạo các cánh hoa mai / hoa đào và hạt nhũ vàng rơi nhẹ
+            const colors = ['#fde047', '#facc15', '#fbcfe8', '#fef08a', '#f472b6'];
+            particles = Array.from({ length: 24 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 4 + 2.5,
+                speedY: Math.random() * 0.7 + 0.3,
+                speedX: (Math.random() - 0.5) * 0.6,
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 2,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                type: Math.random() > 0.4 ? 'petal' : 'sparkle'
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (!state.festiveEffect) return;
+
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX + Math.sin(p.y * 0.02) * 0.3;
+                    p.rotation += p.rotSpeed;
+
+                    if (p.y > canvas.height + 10) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    if (p.x > canvas.width + 10) p.x = -10;
+                    if (p.x < -10) p.x = canvas.width + 10;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = 0.75;
+
+                    if (p.type === 'petal') {
+                        // Vẽ cánh hoa mềm mại
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        // Vẽ đốm sáng nhũ vàng
+                        ctx.beginPath();
+                        ctx.arc(0, 0, p.size * 0.5, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                });
+
+                animationFrameId = requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        function toggleFestiveEffect() {
+            state.festiveEffect = !state.festiveEffect;
+            const label = document.getElementById('effect-label');
+            const canvas = document.getElementById('festive-canvas');
+
+            if (state.festiveEffect) {
+                label.textContent = 'Hoa xuân rơi: BẬT';
+                canvas.classList.remove('hidden');
+                initFestiveCanvas();
+            } else {
+                label.textContent = 'Hoa xuân rơi: TẮT';
+                canvas.classList.add('hidden');
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            }
+        }
+
+        function replayOpenAnimation() {
+            const card = document.getElementById('card-preview-container');
+            card.classList.remove('animate-card-open');
+            void card.offsetWidth; // Trigger reflow
+            card.classList.add('animate-card-open');
+        }
+
+        // ==========================================
+        // 6. TÍNH NĂNG GỢI Ý NGẪU NHIÊN, SAO CHÉP & XUẤT PNG
+        // ==========================================
+
+        function randomizeCard() {
+            // Chọn ngẫu nhiên mẫu nền
+            const randomTpl = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
+            applyTemplate(randomTpl.id, true);
+
+            // Chọn ngẫu nhiên font tiêu đề
+            const fonts = ['font-calligraphy', 'font-luxury', 'font-vibes', 'font-geometric'];
+            setTitleFont(fonts[Math.floor(Math.random() * fonts.length)]);
+
+            // Chọn ngẫu nhiên tiêu đề
+            const titles = ['Chúc Mừng Năm Mới', 'An Khang Thịnh Vượng', 'Vạn Sự Như Ý', 'Tân Niên Đại Cát', 'Xuân Sang Đắc Lộc'];
+            setQuickTitle(titles[Math.floor(Math.random() * titles.length)]);
+
+            // Chọn ngẫu nhiên lời chúc
+            const categories = Object.keys(WISH_BANK);
+            const randomCat = categories[Math.floor(Math.random() * categories.length)];
+            document.getElementById('wish-category').value = randomCat;
+            renderWishSuggestions();
+            const wishes = WISH_BANK[randomCat];
+            document.getElementById('input-message').value = wishes[Math.floor(Math.random() * wishes.length)];
+            updateCardText();
+
+            replayOpenAnimation();
+            showToast('Đã tạo một mẫu thiệp Tết ngẫu nhiên mới!');
+        }
+
+        function copyWishText() {
+            const title = document.getElementById('input-title').value;
+            const recipient = document.getElementById('input-recipient').value;
+            const message = document.getElementById('input-message').value;
+            const sender = document.getElementById('input-sender').value;
+
+            const fullText = `🌸 ${title.toUpperCase()} 🌸\n${recipient}\n${message}\n— ${sender}`;
+
+            // Sử dụng textarea tạm & document.execCommand('copy') để hoạt động ổn định trong mọi iframe
+            const textArea = document.createElement('textarea');
+            textArea.value = fullText;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Đã sao chép trọn vẹn lời chúc vào bộ nhớ tạm!');
+            } catch (err) {
+                showToast('Không thể sao chép tự động, bạn vui lòng chọn và copy thủ công nhé.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        async function downloadCard() {
+            const cardElement = document.getElementById('card-preview-container');
+            const canvasEffect = document.getElementById('festive-canvas');
+            const btnMain = document.getElementById('btn-download-main');
+            const originalBtnHTML = btnMain.innerHTML;
+
+            try {
+                btnMain.disabled = true;
+                btnMain.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Đang xuất ảnh HD...</span>`;
+                lucide.createIcons();
+
+                // Tạm ẩn canvas hạt rơi động để ảnh xuất ra sắc nét, không bị mờ đốm
+                const wasEffectVisible = !canvasEffect.classList.contains('hidden');
+                canvasEffect.classList.add('hidden');
+
+                // Chờ 100ms để DOM ổn định
+                await new Promise(r => setTimeout(r, 100));
+
+                const canvas = await html2canvas(cardElement, {
+                    scale: 3, // Chất lượng cao (3x)
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+
+                if (wasEffectVisible) {
+                    canvasEffect.classList.remove('hidden');
+                }
+
+                // Tạo link tải xuống
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().slice(0, 10);
+                link.download = `Thiep-Chuc-Tet-${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                showToast('Tải thiệp chúc Tết thành công! 🎉');
+            } catch (error) {
+                console.error('Lỗi khi xuất ảnh thiệp:', error);
+                showToast('Có lỗi xảy ra khi tạo ảnh, vui lòng thử lại!');
+            } finally {
+                btnMain.disabled = false;
+                btnMain.innerHTML = originalBtnHTML;
+                lucide.createIcons();
+            }
+        }
+
+        // Hiển thị thông báo mượt mà
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = msg;
+
+            toast.classList.remove('translate-x-full', 'opacity-0');
+            toast.classList.add('translate-x-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-x-0', 'opacity-100');
+                toast.classList.add('translate-x-full', 'opacity-0');
+            }, 3200);
+        }
+    </script>
+</body>
+</html>
